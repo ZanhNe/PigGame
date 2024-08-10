@@ -1,0 +1,18 @@
+Note ở đây những cái cần focus để làm được project
+
+Game này đơn giản là tung xúc xắc đến khi nào đạt 100đ thì win
+-Luật chơi : 
+    mỗi người chơi sẽ tung xúc xắc ở lượt của người đó, có thể tung nhiều lần (nhưng nếu tung ra con 1 thì sẽ bị
+    mất toàn bộ điểm tổng đang có, còn nếu các mặt khác thì sẽ cộng dồn điểm, người chơi có thể HOLD lại để đưa điểm đó vào 
+    điểm hiện tại của người chơi --> Chuyển lượt cho người bên kia)
+
+Các nút : new-game, roll-dice, hold
+
+
+**Khi bấm new-game --> Reset lại mới, quay về player 1 + Mất xúc xắc
+**Khi bấm roll-dice : Tung xúc xắc, các mặt từ 2 --> 6 ra mặt nào thì cộng điểm tương ứng vào current 
+                         Nếu như tung ra mặt 1 thì sẽ bị mất hết điểm trong current --> Chuyển lượt cho người bên kia
+**Khi bấm hold : đem tổng điểm current đang có save vào score của player --> Chuyển lượt cho người bên kia
+
+Mọi thứ bắt nguồn từ randomScore 
+
