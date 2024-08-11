@@ -20,13 +20,7 @@ const displayNone = `none`;
 const maxScore = 100;
 const maxNumber = 6;
 const minNumber = 1;
-let currentScore = 0;
-let scoreOne = 0;
-let scoreTwo = 0;
-let isPlayerOne = true;
-let isWinner = false;
-let firstTimeVisit = false;
-setDisplay(imgDice, displayNone);
+let currentScore, scoreOne, scoreTwo, isPlayerOne, isWinner, firstTimeVisit;
 
 const textAssign = (element, content) => {
   element.textContent = content;
@@ -57,6 +51,16 @@ const switchPlayer = (elementOne, elementTwo, className) => {
   removeClass(elementOne, className);
   addClass(elementTwo, className);
 };
+//Starting game
+const init = function () {
+  currentScore = 0;
+  scoreOne = 0;
+  scoreTwo = 0;
+  isPlayerOne = true;
+  isWinner = false;
+  firstTimeVisit = false;
+  setDisplay(imgDice, displayNone);
+};
 
 const setPlayerHold = (elementPlayerOne, elementPlayerTwo, elementScore, elementCurrentScore, score, current, actionActive, actionWinner) => {
   if (score >= maxScore) {
@@ -70,19 +74,13 @@ const setPlayerHold = (elementPlayerOne, elementPlayerTwo, elementScore, element
 
 function newGame() {
   newGameBtn.addEventListener('click', () => {
-    currentScore = 0;
-    scoreOne = 0;
-    scoreTwo = 0;
-    isPlayerOne = true;
-    isWinner = false;
-    firstTimeVisit = false;
+    init();
     if (playerOne.classList.contains(playerWinner)) removeClass(playerOne, playerWinner);
     if (playerTwo.classList.contains(playerWinner)) removeClass(playerTwo, playerWinner);
     if (!playerOne.classList.contains(playerActive)) addClass(playerOne, playerActive);
     if (playerTwo.classList.contains(playerActive)) removeClass(playerTwo, playerActive);
     setScore(totalScoreOne, currentScoreOne, scoreOne, currentScore);
     setScore(totalScoreTwo, currentScoreTwo, scoreTwo, currentScore);
-    setDisplay(imgDice, displayNone);
   });
 }
 
@@ -95,16 +93,12 @@ function roll() {
     if (!isWinner) {
       const randomScore = Math.trunc(Math.random() * maxNumber) + minNumber;
       imgDice.src = `dice-${randomScore}.png`;
-      if (randomScore !== minNumber) currentScore += randomScore;
-      else currentScore = 0;
+      currentScore = randomScore !== minNumber ? currentScore + randomScore : 0;
 
-      if (isPlayerOne) currentScoreOne.textContent = currentScore;
-      else currentScoreTwo.textContent = currentScore;
+      isPlayerOne ? textAssign(currentScoreOne, currentScore) : textAssign(currentScoreTwo, currentScore);
 
       if (randomScore === minNumber) {
-        if (isPlayerOne) switchPlayer(playerOne, playerTwo, playerActive);
-        else switchPlayer(playerTwo, playerOne, playerActive);
-
+        isPlayerOne ? switchPlayer(playerOne, playerTwo, playerActive) : switchPlayer(playerTwo, playerOne, playerActive);
         isPlayerOne = !isPlayerOne;
       }
     }
@@ -114,13 +108,11 @@ function roll() {
 function hold() {
   holdBtn.addEventListener('click', () => {
     if (!isWinner) {
-      if (isPlayerOne) scoreOne += currentScore;
-      else scoreTwo += currentScore;
+      isPlayerOne ? (scoreOne += currentScore) : (scoreTwo += currentScore);
 
       currentScore = 0;
 
-      if (isPlayerOne) setPlayerHold(playerOne, playerTwo, totalScoreOne, currentScoreOne, scoreOne, currentScore, playerActive, playerWinner);
-      else setPlayerHold(playerTwo, playerOne, totalScoreTwo, currentScoreTwo, scoreTwo, currentScore, playerActive, playerWinner);
+      isPlayerOne ? setPlayerHold(playerOne, playerTwo, totalScoreOne, currentScoreOne, scoreOne, currentScore, playerActive, playerWinner) : setPlayerHold(playerTwo, playerOne, totalScoreTwo, currentScoreTwo, scoreTwo, currentScore, playerActive, playerWinner);
 
       isPlayerOne = !isPlayerOne;
     }
@@ -128,6 +120,7 @@ function hold() {
 }
 
 function start() {
+  init();
   newGame();
   roll();
   hold();
